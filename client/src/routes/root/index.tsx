@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Error } from "@/shared/components/Error";
+import { ErrorWrapper } from "@/shared/components/ErrorWrapper";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { QueryClient } from "@tanstack/react-query";
 import { Link, Outlet, createRootRouteWithContext, useRouter, useCanGoBack } from "@tanstack/react-router";
@@ -32,7 +33,7 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
       >
         {canGoBack ? (
           <Button onClick={() => router.history.back()}
-            className="text-primary mt-9 py-3 px-5 text-[1rem]"
+            className="text-primary font-normal py-3 px-5 text-[1rem]"
             variant={"ghost"}
           >
             Go back
@@ -49,10 +50,13 @@ function RootComponent() {
       <Link className="mx-auto" to="/404">
         <img className="max-h-8" src="/logo.svg" />
       </Link>
-      <main className="max-w-sm w-full flex-1 bg-background">
-        {/* This is where child routes will render */}
-        <Outlet />
-      </main>
+      <ErrorWrapper>
+        <main className="max-w-sm w-full flex-1 bg-background">
+          {/* This is where child routes will render */}
+          <Outlet />
+        </main>
+      </ErrorWrapper>
+
       {import.meta.env.MODE === "development" && (
         <TanStackRouterDevtools position="bottom-left" />
       )}
