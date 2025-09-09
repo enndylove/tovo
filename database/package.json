@@ -1,0 +1,27 @@
+{
+  "name": "@testonwheels/database",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsc --watch --preserveWatchOutput",
+    "build": "tsc -b",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:migrate:drop": "drizzle-kit drop",
+    "db:studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "drizzle-kit": "0.30.0",
+    "@types/pg": "^8.15.5",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "drizzle-orm": "^0.29.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.40.1",
+    "pg": "^8.16.3"
+  }
+}
