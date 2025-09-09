@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Error } from "@/shared/components/errors/Error";
+import { Error } from "@/shared/components/Error";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { QueryClient } from "@tanstack/react-query";
 import { Link, Outlet, createRootRouteWithContext, useRouter, useCanGoBack } from "@tanstack/react-router";
