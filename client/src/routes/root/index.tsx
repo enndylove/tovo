@@ -33,7 +33,7 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
       >
         {canGoBack ? (
           <Button onClick={() => router.history.back()}
-            className="text-primary font-normal py-3 px-5 text-[1rem]"
+            className="text-primary font-normal py-3 px-5 text-base"
             variant={"ghost"}
           >
             Go back
@@ -46,7 +46,7 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <div className="min-h-svh overflow-y-hidden max-h-screen pt-16 flex gap-14 flex-col">
+    <div className="min-h-svh items-center overflow-y-hidden max-h-screen pt-16 flex gap-14 flex-col">
       <Link className="mx-auto" to="/404">
         <img className="max-h-8" src="/logo.svg" />
       </Link>

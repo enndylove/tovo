@@ -13,8 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ErrorImport } from './routes/error'
 import { Route as RootIndexImport } from './routes/root/index'
-import { Route as PagesRegisterIndexImport } from './routes/pages/register/index'
-import { Route as PagesLoginIndexImport } from './routes/pages/login/index'
 import { Route as PagesIndexIndexImport } from './routes/pages/index/index'
 
 // Create/Update Routes
@@ -28,18 +26,6 @@ const ErrorRoute = ErrorImport.update({
 const RootIndexRoute = RootIndexImport.update({
   id: '/root/',
   path: '/root/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PagesRegisterIndexRoute = PagesRegisterIndexImport.update({
-  id: '/pages/register/',
-  path: '/pages/register/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PagesLoginIndexRoute = PagesLoginIndexImport.update({
-  id: '/pages/login/',
-  path: '/pages/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,20 +60,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesIndexIndexImport
       parentRoute: typeof rootRoute
     }
-    '/pages/login/': {
-      id: '/pages/login/'
-      path: '/pages/login'
-      fullPath: '/pages/login'
-      preLoaderRoute: typeof PagesLoginIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/pages/register/': {
-      id: '/pages/register/'
-      path: '/pages/register'
-      fullPath: '/pages/register'
-      preLoaderRoute: typeof PagesRegisterIndexImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -97,16 +69,12 @@ export interface FileRoutesByFullPath {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
   '/pages/index': typeof PagesIndexIndexRoute
-  '/pages/login': typeof PagesLoginIndexRoute
-  '/pages/register': typeof PagesRegisterIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
   '/pages/index': typeof PagesIndexIndexRoute
-  '/pages/login': typeof PagesLoginIndexRoute
-  '/pages/register': typeof PagesRegisterIndexRoute
 }
 
 export interface FileRoutesById {
@@ -114,27 +82,14 @@ export interface FileRoutesById {
   '/error': typeof ErrorRoute
   '/root/': typeof RootIndexRoute
   '/pages/index/': typeof PagesIndexIndexRoute
-  '/pages/login/': typeof PagesLoginIndexRoute
-  '/pages/register/': typeof PagesRegisterIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/error'
-    | '/root'
-    | '/pages/index'
-    | '/pages/login'
-    | '/pages/register'
+  fullPaths: '/error' | '/root' | '/pages/index'
   fileRoutesByTo: FileRoutesByTo
-  to: '/error' | '/root' | '/pages/index' | '/pages/login' | '/pages/register'
-  id:
-    | '__root__'
-    | '/error'
-    | '/root/'
-    | '/pages/index/'
-    | '/pages/login/'
-    | '/pages/register/'
+  to: '/error' | '/root' | '/pages/index'
+  id: '__root__' | '/error' | '/root/' | '/pages/index/'
   fileRoutesById: FileRoutesById
 }
 
@@ -142,16 +97,12 @@ export interface RootRouteChildren {
   ErrorRoute: typeof ErrorRoute
   RootIndexRoute: typeof RootIndexRoute
   PagesIndexIndexRoute: typeof PagesIndexIndexRoute
-  PagesLoginIndexRoute: typeof PagesLoginIndexRoute
-  PagesRegisterIndexRoute: typeof PagesRegisterIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   ErrorRoute: ErrorRoute,
   RootIndexRoute: RootIndexRoute,
   PagesIndexIndexRoute: PagesIndexIndexRoute,
-  PagesLoginIndexRoute: PagesLoginIndexRoute,
-  PagesRegisterIndexRoute: PagesRegisterIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -166,9 +117,7 @@ export const routeTree = rootRoute
       "children": [
         "/error",
         "/root/",
-        "/pages/index/",
-        "/pages/login/",
-        "/pages/register/"
+        "/pages/index/"
       ]
     },
     "/error": {
@@ -179,12 +128,6 @@ export const routeTree = rootRoute
     },
     "/pages/index/": {
       "filePath": "pages/index/index.ts"
-    },
-    "/pages/login/": {
-      "filePath": "pages/login/index.ts"
-    },
-    "/pages/register/": {
-      "filePath": "pages/register/index.ts"
     }
   }
 }

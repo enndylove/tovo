@@ -39,7 +39,7 @@ export function Error({
           <h1 className="text-3xl tracking-[-0.75%] pb-2 font-bold bg-gradient-to-r from-[#4F5684] via-[#4F5684] to-[#FF8282] bg-clip-text text-transparent">
             { title }
           </h1>
-          <p className="text-[1rem] text-primary font-regular mb-9">
+          <p className="text-base text-primary font-regular mb-9">
             {description}
           </p>
           {children}
