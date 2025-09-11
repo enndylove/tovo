@@ -46,7 +46,7 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <div className="min-h-svh items-center overflow-y-hidden max-h-screen pt-16 flex gap-14 flex-col">
+    <div className="min-h-svh items-center max-h-screen pt-16 flex gap-14 flex-col">
       <Link className="mx-auto" to="/404">
         <img className="max-h-8" src="/logo.svg" />
       </Link>

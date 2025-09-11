@@ -23,12 +23,12 @@ export const TimeSelectionStep = ({ bookingData, onNext, onBack }: DefaultSelect
   const handleNext = (data: TimeFormData) => onNext(data);
 
   const formatGuest = `${bookingData.guests} guest${bookingData.guests !== 1 ? 's' : ''}`
-  const formatDate = format(bookingData.date, "MM.dd")
+  const formatDate = format(bookingData.date, "dd.MM")
 
 
   return (
     <Form {...form}>
-      <div className="p-6 space-y-6">
+      <div className="p-4 space-y-4">
         <StepTitle>Select time</StepTitle>
 
         <FormField

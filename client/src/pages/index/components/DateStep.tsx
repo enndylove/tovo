@@ -28,7 +28,7 @@ export const DateSelectionStep = ({ bookingData, onNext, onBack }: DefaultSelect
 
   return (
     <Form {...form}>
-      <div className="p-6 space-y-6">
+      <div className="p-4 space-y-4">
         <StepTitle>Select a date</StepTitle>
 
         <FormField
@@ -54,7 +54,7 @@ export const DateSelectionStep = ({ bookingData, onNext, onBack }: DefaultSelect
         <div className="pt-8 space-y-4">
           <PriceDisplay
             price="650 NOK"
-            description={`${formatGuest}, ${format(form.watch('date'), "MM.dd")}`}
+            description={`${formatGuest}, ${format(form.watch('date'), "dd.MM")}`}
           />
           <NavigationButtons
             onBack={onBack}

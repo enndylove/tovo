@@ -7,6 +7,7 @@ import { DetailsStep } from './components/DetailsStep';
 
 import type { PartialBookingData } from './types';
 import { dates } from './constants';
+import { PayStep } from './components/PayStep';
 
 export function IndexPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -46,9 +47,14 @@ export function IndexPage() {
     />,
     <DetailsStep
       key="details"
+      onNext={handleStepData}
+      bookingData={bookingData}
+      onBack={goBack}
+    />,
+    <PayStep
+      key="pay"
       onNext={() => {}}
       bookingData={bookingData}
-      onSubmit={handleStepData}
       onBack={goBack}
     />
   ];

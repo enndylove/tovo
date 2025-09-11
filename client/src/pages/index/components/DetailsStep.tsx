@@ -11,11 +11,7 @@ import { type DetailsFormData, detailsSchema } from "@/shared/schemas/selection/
 import { useForm } from "react-hook-form";
 
 
-interface DetailsStepProps extends DefaultSelectionStepProps {
-  onSubmit: (data: DetailsFormData) => void;
-}
-
-export const DetailsStep = ({ bookingData, onSubmit, onBack }: DetailsStepProps) => {
+export const DetailsStep = ({ bookingData, onNext, onBack }: DefaultSelectionStepProps) => {
   const form = useForm({
     resolver: zodResolver(detailsSchema),
     defaultValues: {
@@ -25,15 +21,11 @@ export const DetailsStep = ({ bookingData, onSubmit, onBack }: DetailsStepProps)
     },
   });
 
-  const handleSubmit = (data: DetailsFormData) => {
-    // console.log('Final booking data:', { ...bookingData, ...data });
-    alert('Booking submitted successfully!');
-    onSubmit(data);
-  };
+  const handleNext = (data: DetailsFormData) => onNext(data);
 
   return (
     <Form {...form}>
-      <div className="p-6 space-y-6">
+      <div className="p-4 space-y-4">
         <div className="mb-8">
           <StepTitle className="mb-2">Your details</StepTitle>
           <p className="text-[#6A76B6] text-base">Please provide your details below</p>
@@ -67,7 +59,7 @@ export const DetailsStep = ({ bookingData, onSubmit, onBack }: DetailsStepProps)
           <Button
             type="button"
             className="bg-primary text-white px-8 py-3.5 h-fit w-fit text-base"
-            onClick={form.handleSubmit(handleSubmit)}
+            onClick={form.handleSubmit(handleNext)}
           >
             Confirm
           </Button>
