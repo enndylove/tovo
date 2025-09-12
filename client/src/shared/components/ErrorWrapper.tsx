@@ -23,7 +23,7 @@ export function ErrorWrapper({ children }: ErrorWrapperProps) {
         <div className="flex flex-col gap-2">
           <Button
             onClick={() => refetch()}
-            className="py-5 font-normal px-10 text-[1rem]"
+            className="py-5 font-normal px-10 text-base"
             variant={"default"}
           >
             Retry
@@ -31,7 +31,7 @@ export function ErrorWrapper({ children }: ErrorWrapperProps) {
 
           {canGoBack ? (
             <Button onClick={() => router.history.back()}
-              className="text-primary font-normal py-3 px-5 text-[1rem]"
+              className="text-primary font-normal py-3 px-5 text-base"
               variant={"ghost"}
             >
               Back
