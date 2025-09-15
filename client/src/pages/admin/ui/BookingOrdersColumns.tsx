@@ -3,14 +3,16 @@ import { Calendar, Trash2Icon } from "lucide-react";
 
 import { format } from "date-fns";
 
+import { useUpdateOrderStatusMutation } from "../mutations/update-order-status.mutation";
 import { useRemoveOrderMutation } from "../mutations/remove-order.mutation";
+
 import { useBookingOrdersQuery } from "@/hooks/booking-orders/useBookingOrdersQuery";
 import { useBookingOrdersParams } from "@/hooks/booking-orders/useBookingOrdersParams";
-import { useUpdateOrderStatusMutation } from "../mutations/update-order-status.mutation";
+import { useBookingOrderQuery } from "@/hooks/booking-orders/useBookingOrder";
+import { useBookingStatsQuery } from "@/hooks/booking-orders/useBookingStats";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BookingOrder } from "@tovo/database";
-import { useBookingOrderQuery } from "@/hooks/booking-orders/useBookingOrder";
 
 export const columns: ColumnDef<BookingOrder>[] = [
   {
@@ -56,6 +58,7 @@ export const columns: ColumnDef<BookingOrder>[] = [
     header: "Status",
     cell: ({ row }) => {
       const { data, refetch: refetchStatus } = useBookingOrderQuery(row.original.id);
+      const { refetch: refetchStats } = useBookingStatsQuery();
 
       const { page, limit, orderBy, order } = useBookingOrdersParams();
       const { refetch } = useBookingOrdersQuery(
@@ -68,6 +71,7 @@ export const columns: ColumnDef<BookingOrder>[] = [
       const onSuccess = () => {
         refetch();
         refetchStatus();
+        refetchStats();
       }
 
       const updateStatus = useUpdateOrderStatusMutation(onSuccess);
@@ -102,9 +106,11 @@ export const columns: ColumnDef<BookingOrder>[] = [
         orderBy,
         order
       );
+      const { refetch: refetchStats } = useBookingStatsQuery();
 
       const onSuccess = () => {
         refetch();
+        refetchStats();
       }
 
       const removeOrderMutation = useRemoveOrderMutation(onSuccess);

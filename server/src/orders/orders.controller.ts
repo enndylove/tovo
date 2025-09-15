@@ -19,6 +19,11 @@ export class OrdersController {
     return this.ordersService.createBookingOrder(data);
   }
 
+  @Get('stats')
+  async getBookingStats() {
+    return this.ordersService.getBookingStats();
+  }
+
   @Get(':id')
   async getBookingOrder(@Param('id') orderId: BookingOrder['id']) {
     return this.ordersService.getBookingOrder(orderId);

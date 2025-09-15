@@ -5,7 +5,7 @@ import {
   type NewBookingOrder,
   type BookingOrder,
 } from '@tovo/database';
-import { asc, count, desc, eq } from 'drizzle-orm';
+import { asc, count, desc, eq, sql } from 'drizzle-orm';
 
 @Injectable()
 export class OrdersService {
@@ -76,6 +76,47 @@ export class OrdersService {
         limit,
         totalPages: Math.ceil(totalCount[0].count / limit),
       },
+    };
+  }
+
+  async getBookingStats() {
+    // Get unique users by email
+    const totalUsers = await this.db
+      .selectDistinct({ email: bookingOrder.email })
+      .from(bookingOrder);
+
+    // Calculate total revenue
+    const revenueResult = await this.db
+      .select({
+        total: sql`sum(${bookingOrder.price})`,
+      })
+      .from(bookingOrder);
+    const revenue = revenueResult[0]?.total || 0;
+
+    // Count pending alerts
+    const pendingAlertsResult = await this.db
+      .select({
+        count: sql`count(*)`,
+      })
+      .from(bookingOrder)
+      .where(eq(bookingOrder.status, 'pending'));
+    const pendingAlerts = pendingAlertsResult[0]?.count || 0;
+
+    // Get today's bookings count
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const bookingTodayResult = await this.db
+      .select({
+        count: sql`count(*)`,
+      })
+      .from(bookingOrder)
+      .where(eq(bookingOrder.date, today));
+    const bookingToday = bookingTodayResult[0]?.count || 0;
+
+    return {
+      totalUsers: totalUsers.length,
+      revenue: Number(revenue),
+      pendingAlerts: Number(pendingAlerts),
+      bookingToday: Number(bookingToday),
     };
   }
 }
