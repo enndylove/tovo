@@ -21,7 +21,7 @@ export const columns: ColumnDef<BookingOrder>[] = [
       return (
         <div className="flex items-center gap-2 py-2">
           <Calendar className="h-4 w-4 text-gray-500" />
-          <span>{format(new Date(date), "MMM dd, yyyy")}</span>
+          <span className="text-nowrap">{format(new Date(date), "MMM dd, yyyy")}</span>
         </div>
       );
     },
