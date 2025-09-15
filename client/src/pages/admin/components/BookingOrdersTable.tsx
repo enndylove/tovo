@@ -37,7 +37,7 @@ export function BookingOrdersTable() {
     );
   }
 
-  const orders = data?.data?.data ?? []; // витягуємо масив BookingOrder[]
+  const orders = data?.data?.data ?? [];
 
   return (
     <div className="mt-6 flex-1 flex flex-col gap-4">
