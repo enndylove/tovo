@@ -1,8 +1,13 @@
-import type { ColumnDef } from "@tanstack/react-table";
-import { BookingOrder } from "@tovo/database";
-import { Calendar } from "lucide-react";
-import { format } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar, Trash2Icon } from "lucide-react";
+import { format } from "date-fns";
+
+import { useRemoveOrderMutation } from "../mutations/remove-order.mutation";
+import { useBookingOrdersQuery } from "@/hooks/booking-orders/useBookingOrdersQuery";
+import { useBookingOrdersParams } from "@/hooks/booking-orders/useBookingOrdersParams";
+
+import type { ColumnDef } from "@tanstack/react-table";
+import type { BookingOrder } from "@tovo/database";
 
 export const columns: ColumnDef<BookingOrder>[] = [
   {
@@ -53,7 +58,6 @@ export const columns: ColumnDef<BookingOrder>[] = [
         <Select
           value={status}
           onValueChange={(value) => {
-            // для фронта: оновлюємо статус локально
             const rowIndex = table.getRowModel().rows.findIndex(r => r.id === row.id);
             if (rowIndex !== -1) {
               table.options.data[rowIndex].status = value;
@@ -72,4 +76,35 @@ export const columns: ColumnDef<BookingOrder>[] = [
       );
     },
   },
+  {
+    accessorKey: "",
+    header: "Actions",
+    cell: ({ row }) => {
+      const { page, limit, orderBy, order } = useBookingOrdersParams();
+      const { refetch } = useBookingOrdersQuery(
+        page,
+        limit,
+        orderBy,
+        order
+      );
+
+      const onSuccess = () => {
+        refetch();
+      }
+
+      const removeOrderMutation = useRemoveOrderMutation(onSuccess);
+
+      const onRemove = () => {
+        const id = row.getValue("id") as string;
+        removeOrderMutation.mutate({ id });
+      };
+
+      return (
+        <Trash2Icon
+          className="cursor-pointer size-4 text-red-500 hover:text-red-700"
+          onClick={onRemove}
+        />
+      );
+    },
+  }
 ];

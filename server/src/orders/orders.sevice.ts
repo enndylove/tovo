@@ -5,7 +5,7 @@ import {
   type NewBookingOrder,
   type BookingOrder,
 } from '@tovo/database';
-import { asc, count, desc } from 'drizzle-orm';
+import { asc, count, desc, eq } from 'drizzle-orm';
 
 @Injectable()
 export class OrdersService {
@@ -13,6 +13,11 @@ export class OrdersService {
 
   async createBookingOrder(data: NewBookingOrder) {
     await this.db.insert(bookingOrder).values(data);
+    return;
+  }
+
+  async removeBookingOrder(id: BookingOrder['id']) {
+    await this.db.delete(bookingOrder).where(eq(bookingOrder.id, id));
     return;
   }
 

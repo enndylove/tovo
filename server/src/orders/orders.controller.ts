@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { OrdersService } from './orders.sevice';
-import { type NewBookingOrder } from '@tovo/database';
+import type { BookingOrder, NewBookingOrder } from '@tovo/database';
 
 @Controller('booking-orders')
 export class OrdersController {
@@ -9,6 +9,11 @@ export class OrdersController {
   @Post()
   async createBookingOrder(@Body() data: NewBookingOrder) {
     return this.ordersService.createBookingOrder(data);
+  }
+
+  @Delete(':id')
+  async deleteBookingOrder(@Param('id') orderId: BookingOrder['id']) {
+    return this.ordersService.removeBookingOrder(orderId);
   }
 
   @Get()

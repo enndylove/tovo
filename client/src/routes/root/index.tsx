@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 import { Error } from "@/shared/components/Error";
 import { ErrorWrapper } from "@/shared/components/ErrorWrapper";
 import { QueryClient } from "@tanstack/react-query";
@@ -54,6 +55,8 @@ function RootComponent() {
           <Outlet />
         </main>
       </ErrorWrapper>
+
+      <Toaster position="top-right" richColors />
 
       {import.meta.env.MODE === "development" && (
         <TanStackRouterDevtools position="bottom-left" />
