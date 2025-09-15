@@ -95,7 +95,7 @@ export const columns: ColumnDef<BookingOrder>[] = [
       const removeOrderMutation = useRemoveOrderMutation(onSuccess);
 
       const onRemove = () => {
-        const id = row.getValue("id") as string;
+        const id = row.getValue("id") as number;
         removeOrderMutation.mutate({ id });
       };
 
