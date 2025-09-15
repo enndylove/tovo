@@ -7,8 +7,11 @@ import { TimeSelectionStep } from './components/TimeStep';
 import { DetailsStep } from './components/DetailsStep';
 import { PayStep } from './components/PayStep';
 
-import type { NewBookingOrder } from '@tovo/database';
 import { dates } from './constants';
+
+import { useCreateOrderMutation } from './mutations/create-order.mutation';
+
+import type { NewBookingOrder } from '@tovo/database';
 
 export function IndexPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -24,8 +27,20 @@ export function IndexPage() {
     },
   });
 
+
+  const onSuccess = () => {
+    window.location.reload()
+  }
+
+  const createOrderMutation = useCreateOrderMutation({ form, onSuccess })
+
   const goNext = () => setCurrentStep(prev => prev + 1);
   const goBack = () => setCurrentStep(prev => prev - 1);
+
+
+  const onSubmit = (data: NewBookingOrder) => {
+    createOrderMutation.mutate(data)
+  };
 
   const steps = [
     <GuestSelectionStep key="guests" onNext={goNext} />,
@@ -37,7 +52,7 @@ export function IndexPage() {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(goNext)}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         {steps[currentStep]}
       </form>
     </FormProvider>

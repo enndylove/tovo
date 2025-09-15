@@ -1,4 +1,4 @@
-import { api } from "@/shared/api"
+import { CreateOrderEndpoint } from "@/api/booking-orders/create-order";
 
 import { toast } from "sonner"
 
@@ -13,15 +13,15 @@ interface OrderMutationProps {
   onSuccess?: () => void;
 }
 
-export function bookingOrderMutation({ form, onSuccess }: OrderMutationProps) {
+export function useCreateOrderMutation({ form, onSuccess }: OrderMutationProps) {
   return useMutation({
      mutationKey: ["create-order"],
      mutationFn: (values: NewBookingOrder): Promise<AxiosResponse<unknown>> => {
-       return api.post<unknown>("/booking", values)
+       return CreateOrderEndpoint(values)
      },
      onSuccess: () => {
-       toast.success("Transaction created", {
-         description: "You can see the new transaction in the table",
+       toast.success("Successful", {
+         description: "Your reservation has been successfully created!",
        })
 
        onSuccess?.()
@@ -29,7 +29,7 @@ export function bookingOrderMutation({ form, onSuccess }: OrderMutationProps) {
        form.reset()
      },
      onError: (err: Error) => {
-       toast.error("Failed to create transaction", {
+       toast.error("Failed to create reservation. Try again.", {
          description: err.message,
        })
      },
