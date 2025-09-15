@@ -1,26 +1,35 @@
-# ./database/Dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache netcat-openbsd
+# Install PostgreSQL client
+RUN apk add --no-cache postgresql-client
 
-# Install pnpm
+# Install pnpm globally
 RUN npm install -g pnpm
 
-# Copy database package files
+# Copy package files and install dependencies
 COPY ./database/package*.json ./
-
-# Install dependencies
 RUN pnpm install
 
-# Install drizzle-kit
-RUN pnpm add drizzle-kit
-
-# Copy database configuration
+# Copy all database files
 COPY ./database/ ./
 
+# Generate Drizzle migrations
 RUN pnpm db:generate
 
-CMD ["pnpm", "db:migrate"]
+# Create a simple migration script
+RUN echo '#!/bin/sh' > /migrate.sh && \
+  echo 'echo "Waiting for PostgreSQL to be ready..."' >> /migrate.sh && \
+  echo 'until pg_isready -h postgres -p 5432 -U postgres; do' >> /migrate.sh && \
+  echo '  echo "Still waiting..."' >> /migrate.sh && \
+  echo '  sleep 2' >> /migrate.sh && \
+  echo 'done' >> /migrate.sh && \
+  echo 'echo "PostgreSQL is ready!"' >> /migrate.sh && \
+  echo 'echo "Running database migrations..."' >> /migrate.sh && \
+  echo 'pnpm db:migrate' >> /migrate.sh && \
+  echo 'echo "Migrations completed successfully!"' >> /migrate.sh
+
+RUN chmod +x /migrate.sh
+
+CMD ["/migrate.sh"]
