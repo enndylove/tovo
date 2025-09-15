@@ -43,6 +43,8 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-myapp}
       JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-key}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-your-stripe-secret-key}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-your-stripe-webhook-secret}
       PORT: 3000
     ports:
       - "3000:3000"
@@ -50,8 +52,6 @@ services:
       - postgres
     networks:
       - app-network
-    volumes:
-      - ./server/uploads:/app/uploads
 
   # React Frontend
   client:

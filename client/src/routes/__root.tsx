@@ -17,7 +17,6 @@ const router = createRouter({
   defaultStaleTime: 10000,
   context: {
     queryClient,
-    auth: undefined!,
   },
 });
 
