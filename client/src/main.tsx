@@ -5,7 +5,6 @@ import "./index.css";
 
 import { router } from "./routes/__root";
 import { NuqsAdapter } from "nuqs/adapters/react";
-import { Toaster } from "@/components/ui/sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./routes/root";
 
@@ -52,7 +51,6 @@ function renderApp() {
         <NuqsAdapter>
           <WithAuth />
         </NuqsAdapter>
-        <Toaster />
       </QueryClientProvider>
     </StrictMode>,
   );

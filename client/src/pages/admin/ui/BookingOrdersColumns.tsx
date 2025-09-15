@@ -10,6 +10,7 @@ import { useUpdateOrderStatusMutation } from "../mutations/update-order-status.m
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BookingOrder } from "@tovo/database";
+import { useBookingOrderQuery } from "@/hooks/booking-orders/useBookingOrder";
 
 export const columns: ColumnDef<BookingOrder>[] = [
   {
@@ -53,7 +54,9 @@ export const columns: ColumnDef<BookingOrder>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row, table }) => {
+    cell: ({ row }) => {
+      const { data, refetch: refetchStatus } = useBookingOrderQuery(row.original.id);
+
       const { page, limit, orderBy, order } = useBookingOrdersParams();
       const { refetch } = useBookingOrdersQuery(
         page,
@@ -62,24 +65,17 @@ export const columns: ColumnDef<BookingOrder>[] = [
         order
       );
 
-      const status = row.getValue("status") as BookingOrder['status'];
-
       const onSuccess = () => {
         refetch();
+        refetchStatus();
       }
 
       const updateStatus = useUpdateOrderStatusMutation(onSuccess);
 
       return (
         <Select
-          value={status}
+          value={data?.data?.status}
           onValueChange={(value) => {
-            const rowIndex = table.getRowModel().rows.findIndex(r => r.id === row.id);
-
-            if (rowIndex !== -1) {
-              table.options.data[rowIndex].status = value as BookingOrder['status'];
-            }
-
             updateStatus.mutate({ id: row.original.id, status: value as BookingOrder['status'] });
           }}
         >

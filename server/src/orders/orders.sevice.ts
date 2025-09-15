@@ -33,6 +33,16 @@ export class OrdersService {
     return;
   }
 
+  async getBookingOrder(id: BookingOrder['id']) {
+    const [booking] = await this.db
+      .select()
+      .from(bookingOrder)
+      .where(eq(bookingOrder.id, id))
+      .limit(1);
+
+    return booking;
+  }
+
   async getBookingOrders(
     page = 1,
     limit = 6,

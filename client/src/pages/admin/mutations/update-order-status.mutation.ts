@@ -20,13 +20,13 @@ export function useUpdateOrderStatusMutation(onSuccess?: () => void) {
      },
      onSuccess: () => {
       toast.success("Successful", {
-         description: "This reservation has been deleted!",
+         description: "This reservation has been updated!",
       });
 
       onSuccess?.()
      },
      onError: (err: Error) => {
-       toast.error("Failed to delete reservation. Try again.", {
+       toast.error("Failed to update reservation. Try again.", {
          description: err.message,
        })
      },

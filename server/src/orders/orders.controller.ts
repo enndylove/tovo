@@ -19,13 +19,18 @@ export class OrdersController {
     return this.ordersService.createBookingOrder(data);
   }
 
+  @Get(':id')
+  async getBookingOrder(@Param('id') orderId: BookingOrder['id']) {
+    return this.ordersService.getBookingOrder(orderId);
+  }
+
   @Delete(':id')
   async deleteBookingOrder(@Param('id') orderId: BookingOrder['id']) {
     return this.ordersService.removeBookingOrder(orderId);
   }
 
   @Patch(':id')
-  async updateBookibgOrderStatus(
+  async updateBookingOrderStatus(
     @Param('id') orderId: BookingOrder['id'],
     @Body('status') status: BookingOrder['status'],
   ) {
