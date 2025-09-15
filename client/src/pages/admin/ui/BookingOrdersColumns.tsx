@@ -1,10 +1,12 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Trash2Icon } from "lucide-react";
+
 import { format } from "date-fns";
 
 import { useRemoveOrderMutation } from "../mutations/remove-order.mutation";
 import { useBookingOrdersQuery } from "@/hooks/booking-orders/useBookingOrdersQuery";
 import { useBookingOrdersParams } from "@/hooks/booking-orders/useBookingOrdersParams";
+import { useUpdateOrderStatusMutation } from "../mutations/update-order-status.mutation";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BookingOrder } from "@tovo/database";
@@ -52,16 +54,33 @@ export const columns: ColumnDef<BookingOrder>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row, table }) => {
-      const status = row.getValue("status") as string;
+      const { page, limit, orderBy, order } = useBookingOrdersParams();
+      const { refetch } = useBookingOrdersQuery(
+        page,
+        limit,
+        orderBy,
+        order
+      );
+
+      const status = row.getValue("status") as BookingOrder['status'];
+
+      const onSuccess = () => {
+        refetch();
+      }
+
+      const updateStatus = useUpdateOrderStatusMutation(onSuccess);
 
       return (
         <Select
           value={status}
           onValueChange={(value) => {
             const rowIndex = table.getRowModel().rows.findIndex(r => r.id === row.id);
+
             if (rowIndex !== -1) {
-              table.options.data[rowIndex].status = value;
+              table.options.data[rowIndex].status = value as BookingOrder['status'];
             }
+
+            updateStatus.mutate({ id: row.original.id, status: value as BookingOrder['status'] });
           }}
         >
           <SelectTrigger className="w-[120px]">
