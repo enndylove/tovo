@@ -12,7 +12,7 @@ export class OrdersController {
   }
 
   @Get()
-  async getAllBookingOrders() {
-    return this.ordersService.getAllOrders();
+  async getBookingOrders() {
+    return this.ordersService.getBookingOrders();
   }
 }
