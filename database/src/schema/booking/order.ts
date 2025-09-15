@@ -13,6 +13,7 @@ export const bookingOrder = pgTable("booking_order", {
   guests: integer("guests").notNull(),
   date: varchar("date", { length: 50 }).notNull(),
   time: varchar("time", { length: 50 }).notNull(),
+  price: integer("price").notNull().default(650),
 
   firstName: varchar("first_name", { length: 100 }).notNull(),
   lastName: varchar("last_name", { length: 100 }).notNull(),
