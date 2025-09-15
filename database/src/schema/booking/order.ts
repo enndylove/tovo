@@ -1,5 +1,11 @@
-import { pgTable, serial, integer, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, varchar, pgEnum } from "drizzle-orm/pg-core";
 import { timestamps } from "../utils";
+
+export const BookingOrderStatus = pgEnum("booking_order_status", [
+  "pending",
+  "confirmed",
+  "cancelled",
+]);
 
 export const bookingOrder = pgTable("booking_order", {
   id: serial("id").primaryKey(),
@@ -12,7 +18,7 @@ export const bookingOrder = pgTable("booking_order", {
   lastName: varchar("last_name", { length: 100 }).notNull(),
   email: varchar("email", { length: 150 }).notNull(),
 
-  status: text("status").notNull().default("pending"),
+  status: BookingOrderStatus("status").notNull().default("pending"),
 
   ...timestamps
 });
