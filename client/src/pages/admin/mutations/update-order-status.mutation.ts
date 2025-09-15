@@ -1,4 +1,4 @@
-import { RemoveOrderEndpoint } from "@/api/booking-orders/remove-order";
+import { UpdateOrderStatusEndpoint } from "@/api/booking-orders/update-order-status";
 
 import { toast } from "sonner"
 
@@ -7,11 +7,16 @@ import { useMutation } from "@tanstack/react-query"
 import type { AxiosResponse } from "axios";
 import type { BookingOrder } from "@tovo/database";
 
-export function useRemoveOrderMutation(onSuccess?: () => void) {
+type UpdateStatusRequest = {
+  id: BookingOrder['id'],
+  status: BookingOrder['status']
+}
+
+export function useUpdateOrderStatusMutation(onSuccess?: () => void) {
   return useMutation({
-     mutationKey: ["remove-order"],
-     mutationFn: (values: { id: BookingOrder["id"] }): Promise<AxiosResponse<unknown>> => {
-       return RemoveOrderEndpoint(values)
+     mutationKey: ["update-order-status"],
+     mutationFn: (values: UpdateStatusRequest): Promise<AxiosResponse<unknown>> => {
+       return UpdateOrderStatusEndpoint(values)
      },
      onSuccess: () => {
       toast.success("Successful", {
