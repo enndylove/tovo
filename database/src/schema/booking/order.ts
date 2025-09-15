@@ -16,3 +16,6 @@ export const bookingOrder = pgTable("booking_order", {
 
   ...timestamps
 });
+
+export type BookingOrder = typeof bookingOrder.$inferSelect;
+export type NewBookingOrder = typeof bookingOrder.$inferInsert;
