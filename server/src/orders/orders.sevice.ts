@@ -21,6 +21,18 @@ export class OrdersService {
     return;
   }
 
+  async updateBookingStatus(
+    id: BookingOrder['id'],
+    status: BookingOrder['status'],
+  ) {
+    await this.db
+      .update(bookingOrder)
+      .set({ status })
+      .where(eq(bookingOrder.id, id));
+
+    return;
+  }
+
   async getBookingOrders(
     page = 1,
     limit = 6,

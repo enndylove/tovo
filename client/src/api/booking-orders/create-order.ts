@@ -1,6 +1,7 @@
 import { api } from "@/shared/api";
+
 import type { AxiosResponse } from "axios";
-import { NewBookingOrder } from "@tovo/database"
+import type { NewBookingOrder } from "@tovo/database"
 
 export async function CreateOrderEndpoint(
   query: NewBookingOrder

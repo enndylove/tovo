@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { OrdersService } from './orders.sevice';
 import type { BookingOrder, NewBookingOrder } from '@tovo/database';
 
@@ -14,6 +22,14 @@ export class OrdersController {
   @Delete(':id')
   async deleteBookingOrder(@Param('id') orderId: BookingOrder['id']) {
     return this.ordersService.removeBookingOrder(orderId);
+  }
+
+  @Patch(':id')
+  async updateBookibgOrderStatus(
+    @Param('id') orderId: BookingOrder['id'],
+    @Body('status') status: BookingOrder['status'],
+  ) {
+    return this.ordersService.updateBookingStatus(orderId, status);
   }
 
   @Get()
