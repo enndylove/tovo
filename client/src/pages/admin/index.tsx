@@ -1,5 +1,8 @@
 import { BookingOrdersTable } from "./components/BookingOrdersTable";
 import { BookingStats } from "./components/BookingStats";
+import { CharterStats } from "./ui/CharterStats";
+import { ChartRadarDots } from "./ui/ChartStatsCircle";
+import { ChartRadialText } from "./ui/ChartStatsRadial";
 
 export function AdminPage() {
   return (
@@ -14,6 +17,9 @@ export function AdminPage() {
       <div className="bg-white rounded-lg shadow p-4">
         <BookingOrdersTable />
       </div>
+      <CharterStats />
+      <ChartRadarDots />
+      <ChartRadialText />
     </div>
   );
 }

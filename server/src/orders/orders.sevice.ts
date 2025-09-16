@@ -6,6 +6,7 @@ import {
   type BookingOrder,
 } from '@tovo/database';
 import { asc, count, desc, eq, sql } from 'drizzle-orm';
+import { monthNames } from 'src/constants/orders.constants';
 
 @Injectable()
 export class OrdersService {
@@ -81,6 +82,22 @@ export class OrdersService {
     };
   }
 
+  async chartStats() {
+    const result = await this.db
+      .select({
+        monthNumber: sql<number>`EXTRACT(MONTH FROM ${bookingOrder.date}::DATE)`,
+        booking: sql<number>`COUNT(*)`,
+      })
+      .from(bookingOrder)
+      .groupBy(sql`EXTRACT(MONTH FROM ${bookingOrder.date}::DATE)`)
+      .orderBy(sql`EXTRACT(MONTH FROM ${bookingOrder.date}::DATE)`);
+
+    return result.map((r) => ({
+      month: monthNames[r.monthNumber - 1],
+      booking: Number(r.booking),
+    }));
+  }
+
   async getBookingStats() {
     const totalUsers = await this.db
       .selectDistinct({ email: bookingOrder.email })
@@ -110,11 +127,21 @@ export class OrdersService {
       .where(eq(bookingOrder.date, today));
     const bookingToday = bookingTodayResult[0]?.count || 0;
 
+    const chartStats = await this.chartStats();
+
+    const resultSum = await this.db
+      .select({
+        booking: sql<number>`COUNT(*)`,
+      })
+      .from(bookingOrder);
+
     return {
       totalUsers: totalUsers.length,
       revenue: Number(revenue),
       pendingAlerts: Number(pendingAlerts),
       bookingToday: Number(bookingToday),
+      chartStats: chartStats,
+      bookingSum: resultSum[0]?.booking || 0,
     };
   }
 }
