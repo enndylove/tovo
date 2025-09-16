@@ -55,12 +55,10 @@ export class OrdersService {
   ) {
     const offset = (page - 1) * limit;
 
-    // отримуємо загальну кількість для пагінації
     const totalCount = await this.db
       .select({ count: count() })
       .from(bookingOrder);
 
-    // отримуємо сторінку ордерів
     const orders = await this.db
       .select()
       .from(bookingOrder)
@@ -84,12 +82,10 @@ export class OrdersService {
   }
 
   async getBookingStats() {
-    // Get unique users by email
     const totalUsers = await this.db
       .selectDistinct({ email: bookingOrder.email })
       .from(bookingOrder);
 
-    // Calculate total revenue
     const revenueResult = await this.db
       .select({
         total: sql`sum(${bookingOrder.price})`,
@@ -97,7 +93,6 @@ export class OrdersService {
       .from(bookingOrder);
     const revenue = revenueResult[0]?.total || 0;
 
-    // Count pending alerts
     const pendingAlertsResult = await this.db
       .select({
         count: sql`count(*)`,
@@ -106,7 +101,6 @@ export class OrdersService {
       .where(eq(bookingOrder.status, 'pending'));
     const pendingAlerts = pendingAlertsResult[0]?.count || 0;
 
-    // Get today's bookings count
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
     const bookingTodayResult = await this.db
       .select({

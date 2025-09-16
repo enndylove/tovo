@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { OrdersService } from './orders.sevice';
 import type { BookingOrder, NewBookingOrder } from '@tovo/database';
@@ -43,7 +44,17 @@ export class OrdersController {
   }
 
   @Get()
-  async getBookingOrders() {
-    return this.ordersService.getBookingOrders();
+  async getBookingOrders(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+    @Query('orderBy') orderBy: keyof BookingOrder,
+    @Query('order') order: 'asc' | 'desc',
+  ) {
+    return this.ordersService.getBookingOrders(
+      Number(page) || 1,
+      Number(limit) || 6,
+      orderBy || 'id',
+      order || 'asc',
+    );
   }
 }
