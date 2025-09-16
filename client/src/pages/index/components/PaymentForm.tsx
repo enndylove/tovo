@@ -47,7 +47,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         customerEmail,
       });
 
-      const { clientSecret, paymentIntentId } = data;
+      const { paymentIntentId } = data;
       setPaymentStatus("Processing payment...");
 
       // Simulate payment processing delay

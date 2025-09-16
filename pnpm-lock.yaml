@@ -101,9 +101,6 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.21.2
         version: 8.21.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@tovo/database':
-        specifier: workspace:*
-        version: link:../database
       axios:
         specifier: ^1.8.2
         version: 1.9.0
@@ -286,6 +283,9 @@ importers:
       drizzle-orm:
         specifier: 0.40.1
         version: 0.40.1(@types/pg@8.15.5)(gel@2.1.0)(pg@8.16.3)
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
       form-data:
         specifier: ^4.0.2
         version: 4.0.2
@@ -336,7 +336,7 @@ importers:
         specifier: ^1.4.8
         version: 1.4.8(@types/express@5.0.1)
       '@types/express':
-        specifier: ^5.0.0
+        specifier: ^5.0.1
         version: 5.0.1
       '@types/jest':
         specifier: ^29.5.14
