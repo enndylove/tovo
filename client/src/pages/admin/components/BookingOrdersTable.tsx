@@ -21,7 +21,7 @@ export function BookingOrdersTable() {
     return (
       <div className="mt-6 flex-1 flex flex-col gap-4">
         <div className="flex-1">
-          <DataTableSkeleton columnCount={7} rowCount={limit} />
+          <DataTableSkeleton columnCount={3} rowCount={limit} />
         </div>
         <PaginationSkeleton className="justify-start" />
       </div>
