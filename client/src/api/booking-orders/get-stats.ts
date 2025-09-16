@@ -7,6 +7,10 @@ type BookingStatsResponse = {
   revenue: number,
   pendingAlerts: number,
   bookingToday: number,
+  chartStats: {
+      month: string;
+      booking: number;
+  }[]
 }
 
 export async function GetStatsEndpoint(): Promise<AxiosResponse<BookingStatsResponse>> {
