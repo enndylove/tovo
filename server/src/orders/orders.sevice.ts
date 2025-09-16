@@ -129,12 +129,19 @@ export class OrdersService {
 
     const chartStats = await this.chartStats();
 
+    const resultSum = await this.db
+      .select({
+        booking: sql<number>`COUNT(*)`,
+      })
+      .from(bookingOrder);
+
     return {
       totalUsers: totalUsers.length,
       revenue: Number(revenue),
       pendingAlerts: Number(pendingAlerts),
       bookingToday: Number(bookingToday),
       chartStats: chartStats,
+      bookingSum: resultSum[0]?.booking || 0,
     };
   }
 }
