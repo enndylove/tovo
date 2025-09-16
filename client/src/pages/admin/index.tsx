@@ -1,6 +1,7 @@
 import { BookingOrdersTable } from "./components/BookingOrdersTable";
 import { BookingStats } from "./components/BookingStats";
 import { CharterStats } from "./ui/CharterStats";
+import { ChartRadarDots } from "./ui/ChartStatsCircle";
 
 export function AdminPage() {
   return (
@@ -16,6 +17,7 @@ export function AdminPage() {
         <BookingOrdersTable />
       </div>
       <CharterStats />
+      <ChartRadarDots />
     </div>
   );
 }
