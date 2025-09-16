@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { paymentSchema, type PaymentFormValues } from "@/shared/schemas/payment/payment.schema";
+import { useCreateIntentMutation } from "../mutations/create-intent.mutation";
+
+import type { BookingOrder } from "@tovo/database";
+import type { PaymentIntent } from "@stripe/stripe-js";
 
 interface PaymentFormProps {
-  bookingId: string;
-  amount: number;
-  customerEmail: string;
-  onSuccess: (paymentIntent: any) => void;
+  bookingId: BookingOrder['id'];
+  amount: BookingOrder['price'];
+  customerEmail: BookingOrder['email'];
+  onSuccess: (paymentIntent: PaymentIntent) => void;
   onError: (error: string) => void;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({
+export const PaymentForm: React.FC<PaymentFormProps> = ({
   bookingId,
   amount,
   customerEmail,
@@ -29,52 +33,47 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     mode: "onBlur",
   });
 
-  const onSubmit = async (data: PaymentFormValues) => {
+  const createIntentMutation = useCreateIntentMutation();
+
+  const onSubmit = async (reqData: PaymentFormValues) => {
     setPaymentStatus("Creating payment intent...");
 
     try {
       // Step 1: Create payment intent
-      const response = await fetch(
-        "http://localhost:3000/payments/create-intent",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bookingId,
-            amount,
-            currency: "usd",
-            customerEmail,
-          }),
-        }
-      );
+      const { data } = await createIntentMutation.mutateAsync({
+        bookingId,
+        amount,
+        currency: "nok",
+        customerEmail,
+      });
 
-      if (!response.ok) throw new Error("Failed to create payment intent");
-
-      const { clientSecret, paymentIntentId } = await response.json();
+      const { clientSecret, paymentIntentId } = data;
       setPaymentStatus("Processing payment...");
 
       // Simulate payment processing delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Mock outcomes
-      if (data.cardNumber === "4242424242424242") {
+      if (reqData.cardNumber === "4242424242424242") {
         const mockPaymentIntent = {
           id: paymentIntentId,
           status: "succeeded",
           amount: amount * 100,
-          currency: "usd",
-        };
+          currency: "nok",
+        } as unknown as PaymentIntent;
+
         onSuccess(mockPaymentIntent);
+
         setPaymentStatus("Payment successful!");
-      } else if (data.cardNumber === "4000000000000002") {
+      } else if (reqData.cardNumber === "4000000000000002") {
         throw new Error("Your card was declined");
       } else {
         const mockPaymentIntent = {
           id: paymentIntentId,
           status: "succeeded",
           amount: amount * 100,
-          currency: "usd",
-        };
+          currency: "nok",
+        } as unknown as PaymentIntent;
         onSuccess(mockPaymentIntent);
         setPaymentStatus("Payment successful!");
       }
@@ -90,7 +89,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
           Complete Payment
         </h2>
-        <p className="text-gray-600">Amount: ${amount.toFixed(2)}</p>
+        <p className="text-gray-600">Amount: {amount.toFixed(2)} NOK</p>
         <p className="text-gray-600">Booking ID: {bookingId}</p>
       </div>
 
@@ -174,7 +173,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               : "bg-blue-600 hover:bg-blue-700 text-white"
           }`}
         >
-          {isSubmitting ? "Processing..." : `Pay $${amount.toFixed(2)}`}
+          {isSubmitting ? "Processing..." : `Pay ${amount.toFixed(2)} NOK`}
         </button>
       </form>
 
@@ -187,99 +186,3 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     </div>
   );
 };
-
-// Demo booking
-const DEMO_BOOKING = {
-  id: "booking_123",
-  amount: 99.99,
-  customerEmail: "customer@example.com",
-};
-
-const StripePaymentDemo: React.FC = () => {
-  const [paymentResult, setPaymentResult] = useState<any>(null);
-  const [error, setError] = useState<string>("");
-
-  const handlePaymentSuccess = (paymentIntent: any) => {
-    setPaymentResult(paymentIntent);
-    setError("");
-  };
-
-  const handlePaymentError = (errorMessage: string) => {
-    setError(errorMessage);
-    setPaymentResult(null);
-  };
-
-  const resetDemo = () => {
-    setPaymentResult(null);
-    setError("");
-  };
-
-  if (paymentResult) {
-    return (
-      <div className="max-w-md mx-auto p-6 bg-green-50 rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-            <svg
-              className="w-6 h-6 text-green-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
-            Payment Successful!
-          </h2>
-          <p className="text-green-700 mb-4">Payment ID: {paymentResult.id}</p>
-          <p className="text-green-700 mb-4">
-            Amount: ${(paymentResult.amount / 100).toFixed(2)}
-          </p>
-          <button
-            onClick={resetDemo}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
-          >
-            Try Another Payment
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Stripe Payment Integration Demo
-          </h1>
-          <p className="text-gray-600">
-            This demo shows how to integrate Stripe payments with your NestJS
-            backend
-          </p>
-        </div>
-
-        <PaymentForm
-          bookingId={DEMO_BOOKING.id}
-          amount={DEMO_BOOKING.amount}
-          customerEmail={DEMO_BOOKING.customerEmail}
-          onSuccess={handlePaymentSuccess}
-          onError={handlePaymentError}
-        />
-
-        {error && (
-          <div className="mt-4 max-w-md mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-            <strong>Error:</strong> {error}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default StripePaymentDemo;

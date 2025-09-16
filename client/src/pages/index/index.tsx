@@ -1,18 +1,16 @@
-import { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-
 import { GuestSelectionStep } from './components/GuestStep';
 import { DateSelectionStep } from './components/DateStep';
 import { TimeSelectionStep } from './components/TimeStep';
 import { DetailsStep } from './components/DetailsStep';
 import { PayStep } from './components/PayStep';
+import { StripePaymentDemo } from './components/StripePaymentDemo';
 
 import { dates } from './constants';
 
-import { useCreateOrderMutation } from './mutations/create-order.mutation';
+import { useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import type { NewBookingOrder } from '@tovo/database';
-import StripePaymentDemo from './components/PaymentForm';
 
 export function IndexPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -21,6 +19,7 @@ export function IndexPage() {
     defaultValues: {
       guests: 1,
       date: dates[0].value,
+      price: 650,
       time: '',
       firstName: '',
       lastName: '',
@@ -28,36 +27,21 @@ export function IndexPage() {
     },
   });
 
-
-  const onSuccess = () => {
-    window.location.reload()
-  }
-
-  const createOrderMutation = useCreateOrderMutation({ form, onSuccess })
-
   const goNext = () => setCurrentStep(prev => prev + 1);
   const goBack = () => setCurrentStep(prev => prev - 1);
-
-
-  const onSubmit = (data: NewBookingOrder) => {
-    createOrderMutation.mutate(data)
-  };
 
   const steps = [
     <GuestSelectionStep key="guests" onNext={goNext} />,
     <DateSelectionStep key="date" onNext={goNext} onBack={goBack} />,
     <TimeSelectionStep key="time" onNext={goNext} onBack={goBack} />,
-    <DetailsStep key="details" onNext={goNext} onBack={goBack} />,
+    <DetailsStep key="details" form={form} onNext={goNext} onBack={goBack} />,
     <PayStep key="pay" onNext={goNext} onBack={goBack} />,
-    <StripePaymentDemo key="stripe-demo" />
+    <StripePaymentDemo key="stripe-demo" form={form} />
   ];
 
   return (
     <FormProvider {...form}>
-      {/* onSubmit={form.handleSubmit(onSubmit)} */}
-      <form onSubmit={(e) => e.preventDefault()} >
-        {steps[currentStep]}
-      </form>
+      {steps[currentStep]}
     </FormProvider>
   );
 }

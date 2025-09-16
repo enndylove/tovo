@@ -1,8 +1,10 @@
+import type { BookingOrder } from "@tovo/database";
+
 export type CreatePaymentIntentDto = {
-  bookingId: string;
-  amount: number;
+  bookingId: BookingOrder['id'];
+  amount: BookingOrder['price'];
   currency?: string;
-  customerEmail?: string;
+  customerEmail?: BookingOrder['email'];
 }
 
 export type ConfirmPaymentDto = {

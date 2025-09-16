@@ -12,8 +12,12 @@ export class OrdersService {
   constructor(@Inject('DB') private db: DB) {}
 
   async createBookingOrder(data: NewBookingOrder) {
-    await this.db.insert(bookingOrder).values(data);
-    return;
+    const [booking] = await this.db
+      .insert(bookingOrder)
+      .values(data)
+      .returning();
+
+    return booking;
   }
 
   async removeBookingOrder(id: BookingOrder['id']) {

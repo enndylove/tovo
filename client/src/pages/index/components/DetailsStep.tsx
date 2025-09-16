@@ -1,4 +1,5 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, type UseFormReturn } from 'react-hook-form';
+import { useCreateOrderMutation } from '../mutations/create-order.mutation';
 
 import { Button } from "@/components/ui/button";
 
@@ -8,8 +9,24 @@ import { FormInput } from "../ui/FormInput";
 import type { NewBookingOrder } from '@tovo/database';
 import type { DefaultSelectionStepProps } from '../types';
 
-export const DetailsStep = ({ onNext, onBack }: DefaultSelectionStepProps) => {
+interface DetailsStepProps extends DefaultSelectionStepProps {
+  form: UseFormReturn<NewBookingOrder, any, NewBookingOrder>
+  onSuccess?: () => void;
+}
+
+export const DetailsStep = ({ form, onNext, onBack, onSuccess }: DetailsStepProps) => {
+  const createOrderMutation = useCreateOrderMutation({ form, onSuccess })
+
   const { register } = useFormContext<NewBookingOrder>();
+
+  const onConfirm = () => {
+    createOrderMutation.mutate(form.getValues(), {
+      onSuccess: (response) => {
+        form.setValue("id", response.data.id)
+        onNext();
+      },
+    })
+  }
 
   return (
     <div className="p-4 space-y-4">
@@ -25,7 +42,7 @@ export const DetailsStep = ({ onNext, onBack }: DefaultSelectionStepProps) => {
       </div>
 
       <div className="pt-8 space-y-4 flex flex-col justify-center items-center">
-        <Button type="submit" className="bg-primary text-white px-8 py-3.5 h-fit w-fit text-base" onClick={onNext}>Confirm</Button>
+        <Button type="submit" className="bg-primary text-white px-8 py-3.5 h-fit w-fit text-base" onClick={onConfirm}>Confirm</Button>
         <Button type="button" variant="ghost" className="w-fit text-primary text-base px-8 py-3.5" onClick={onBack}>Back</Button>
       </div>
     </div>

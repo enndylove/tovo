@@ -4,7 +4,7 @@ import { toast } from "sonner"
 
 import { useMutation } from "@tanstack/react-query"
 
-import type { NewBookingOrder } from "@tovo/database"
+import type { BookingOrder, NewBookingOrder } from "@tovo/database"
 import type { AxiosResponse } from "axios";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -16,7 +16,7 @@ interface OrderMutationProps {
 export function useCreateOrderMutation({ form, onSuccess }: OrderMutationProps) {
   return useMutation({
      mutationKey: ["create-order"],
-     mutationFn: (values: NewBookingOrder): Promise<AxiosResponse<unknown>> => {
+     mutationFn: (values: NewBookingOrder): Promise<AxiosResponse<BookingOrder>> => {
        return CreateOrderEndpoint(values)
      },
      onSuccess: () => {
