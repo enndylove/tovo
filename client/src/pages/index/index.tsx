@@ -12,6 +12,7 @@ import { dates } from './constants';
 import { useCreateOrderMutation } from './mutations/create-order.mutation';
 
 import type { NewBookingOrder } from '@tovo/database';
+import StripePaymentDemo from './components/PaymentForm';
 
 export function IndexPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -47,12 +48,14 @@ export function IndexPage() {
     <DateSelectionStep key="date" onNext={goNext} onBack={goBack} />,
     <TimeSelectionStep key="time" onNext={goNext} onBack={goBack} />,
     <DetailsStep key="details" onNext={goNext} onBack={goBack} />,
-    <PayStep key="pay" onBack={goBack} />,
+    <PayStep key="pay" onNext={goNext} onBack={goBack} />,
+    <StripePaymentDemo key="stripe-demo" />
   ];
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      {/* onSubmit={form.handleSubmit(onSubmit)} */}
+      <form onSubmit={(e) => e.preventDefault()} >
         {steps[currentStep]}
       </form>
     </FormProvider>

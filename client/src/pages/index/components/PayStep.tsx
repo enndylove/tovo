@@ -7,12 +7,10 @@ import { PayInput } from "../ui/PayInput";
 import { format } from "date-fns";
 
 import type { NewBookingOrder } from '@tovo/database';
+import type { DefaultSelectionStepProps } from '../types';
 
-interface PayStepProps {
-  onBack: () => void;
-}
 
-export const PayStep = ({ onBack }: PayStepProps) => {
+export const PayStep = ({ onNext, onBack }: DefaultSelectionStepProps) => {
   const { watch } = useFormContext<NewBookingOrder>();
   const bookingData = watch();
 
@@ -33,7 +31,7 @@ export const PayStep = ({ onBack }: PayStepProps) => {
           <p className="text-sm text-[#6069A2]">inkl. MVA</p>
         </div>
         <p className="text-base text-[#6069A2]">Choose how you’d like to pay for your booking</p>
-        <Button className="w-full py-3 flex items-center gap-4 font-normal text-base text-[#454C6A]" variant="outline">
+        <Button className="w-full py-3 flex items-center gap-4 font-normal text-base text-[#454C6A]" variant="outline" onClick={onNext}>
           <img className="object-contain h-2.5" src="/stripe.png" />
           Pay now with Stripe
         </Button>
