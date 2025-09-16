@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 import { Error } from "@/shared/components/Error";
 import { ErrorWrapper } from "@/shared/components/ErrorWrapper";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { QueryClient } from "@tanstack/react-query";
 import { Link, Outlet, createRootRouteWithContext, useRouter, useCanGoBack } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -16,7 +16,6 @@ export const queryClient = new QueryClient({
 
 type MyRouterContext = {
   queryClient: typeof queryClient;
-  auth: ReturnType<typeof useAuth>;
 };
 
 const rootRoute = createRootRouteWithContext<MyRouterContext>()({
@@ -47,7 +46,7 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <div className="min-h-svh items-center max-h-screen pt-16 flex gap-14 flex-col">
-      <Link className="mx-auto" to="/404">
+      <Link className="mx-auto" to="/">
         <img className="max-h-8" src="/logo.svg" />
       </Link>
       <ErrorWrapper>
@@ -56,6 +55,8 @@ function RootComponent() {
           <Outlet />
         </main>
       </ErrorWrapper>
+
+      <Toaster position="top-right" richColors />
 
       {import.meta.env.MODE === "development" && (
         <TanStackRouterDevtools position="bottom-left" />

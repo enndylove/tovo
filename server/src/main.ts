@@ -4,11 +4,10 @@ import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { DEV_CLIENT_URL } from './constants/dev.constants';
 import { AggregateErrorFilter } from './filters/aggregate-error.filter';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.setGlobalPrefix(process.env.API_PREFIX || '');
 
   app.use(cookieParser());
 
@@ -20,6 +19,10 @@ async function bootstrap() {
     allowedHeaders: ['Authorization', 'Content-Type'],
     exposedHeaders: ['Authorization'],
   });
+
+  app.use('/payments/webhook', express.raw({ type: 'application/json' }));
+
+  app.setGlobalPrefix(process.env.API_PREFIX || '');
 
   app.useGlobalPipes(
     new ValidationPipe({

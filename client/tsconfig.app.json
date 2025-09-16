@@ -18,8 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@testonwheels/database": ["./database"],
-      "@testonwheels/database/*": ["./database/*"]
+      "@tovo/database": ["./database"],
+      "@tovo/database/*": ["./database/*"]
     }
   },
   "include": ["src"]

@@ -16,7 +16,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      "@testonwheels/database": "/database/src",
+      "@tovo/database": "/database/src",
     },
   },
   optimizeDeps: {

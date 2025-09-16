@@ -1,10 +1,13 @@
 import { createRouter } from "@tanstack/react-router";
 import { queryClient, rootRoute } from "./root";
 import { ErrorComponent } from "./error";
+
 import { IndexRoute } from "./pages/index";
+import { AdminRoute } from "./pages/admin";
 
 const routeTree = rootRoute.addChildren([
   IndexRoute,
+  AdminRoute
 ]);
 
 const router = createRouter({
@@ -17,7 +20,6 @@ const router = createRouter({
   defaultStaleTime: 10000,
   context: {
     queryClient,
-    auth: undefined!,
   },
 });
 

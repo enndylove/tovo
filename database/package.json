@@ -1,5 +1,5 @@
 {
-  "name": "@testonwheels/database",
+  "name": "@tovo/database",
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

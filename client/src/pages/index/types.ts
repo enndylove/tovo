@@ -10,7 +10,6 @@ export type BookingDataType = {
 export type PartialBookingData = Partial<BookingDataType>;
 
 export interface DefaultSelectionStepProps {
-  bookingData: BookingDataType;
-  onNext: (data: PartialBookingData) => void; // required
+  onNext: () => void; // required
   onBack?: () => void;
 }

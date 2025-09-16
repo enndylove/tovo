@@ -24,7 +24,7 @@
     "noFallthroughCasesInSwitch": false,
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {
-      "@testonwheels/database": ["../database"]
+      "@tovo/database": ["../database"]
     }
   }
 }

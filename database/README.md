@@ -1,1 +1,1 @@
-pnpm --filter @testonwheels/database run build
+pnpm --filter @tovo/database run build
