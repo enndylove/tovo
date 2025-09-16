@@ -5,6 +5,7 @@ export function useServerStatusQuery() {
   const q = useQuery({
     queryKey: ["server-status"],
     queryFn: () => ServerStatusEndpoint(),
+    staleTime: 5000,
   });
 
   return q;
