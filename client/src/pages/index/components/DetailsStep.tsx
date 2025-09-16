@@ -8,7 +8,7 @@ import { FormInput } from "../ui/FormInput";
 import type { NewBookingOrder } from '@tovo/database';
 import type { DefaultSelectionStepProps } from '../types';
 
-export const DetailsStep = ({ onBack }: DefaultSelectionStepProps) => {
+export const DetailsStep = ({ onNext, onBack }: DefaultSelectionStepProps) => {
   const { register } = useFormContext<NewBookingOrder>();
 
   return (
@@ -25,7 +25,7 @@ export const DetailsStep = ({ onBack }: DefaultSelectionStepProps) => {
       </div>
 
       <div className="pt-8 space-y-4 flex flex-col justify-center items-center">
-        <Button type="submit" className="bg-primary text-white px-8 py-3.5 h-fit w-fit text-base">Confirm</Button>
+        <Button type="submit" className="bg-primary text-white px-8 py-3.5 h-fit w-fit text-base" onClick={onNext}>Confirm</Button>
         <Button type="button" variant="ghost" className="w-fit text-primary text-base px-8 py-3.5" onClick={onBack}>Back</Button>
       </div>
     </div>
