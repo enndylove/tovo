@@ -1,0 +1,1 @@
+ALTER TYPE "public"."booking_order_status" ADD VALUE 'failed';

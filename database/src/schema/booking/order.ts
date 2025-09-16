@@ -5,6 +5,7 @@ export const BookingOrderStatus = pgEnum("booking_order_status", [
   "pending",
   "confirmed",
   "cancelled",
+  "failed",
 ]);
 
 export const bookingOrder = pgTable("booking_order", {
